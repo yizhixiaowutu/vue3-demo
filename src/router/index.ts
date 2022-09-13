@@ -17,6 +17,19 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/AboutView.vue"),
     },
+    // 以下为新增路由
+    {
+      path: "/study",
+      name: "study",
+      component: () => import("@/views/Study/index.vue"),
+      children: [
+        {
+          path: "/worker",
+          name: "worker",
+          component: () => import("@/views/Study/Worker/index.vue"),
+        },
+      ],
+    },
   ],
 });
 
