@@ -10,3 +10,13 @@ export const useCounterStore = defineStore("counter", () => {
 
   return { count, doubleCount, increment };
 });
+
+export const useInfoStore = defineStore("info", {
+  state() {
+    return {
+      counter: 0,
+      name: "一只小於菟",
+      isAdmin: true,
+    };
+  },
+});
