@@ -23,6 +23,11 @@ const router = createRouter({
       name: "study",
       component: () => import("@/views/index.vue"),
     },
+    {
+      path: "/ts",
+      name: "ts",
+      component: () => import("@/views/typeScript.vue"),
+    },
   ],
 });
 

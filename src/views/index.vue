@@ -14,6 +14,11 @@
         <p>Info_counter: {{ infoStore.counter }}</p>
         <p>Info_isAdmin: {{ infoStore.isAdmin }}</p>
       </div>
+      <p>------------------分割线---------------</p>
+      <div>
+        <span>Direction: {{ dir.NORTH }} </span>
+      </div>
+      <!-- TypeScript -->
     </div>
     <div class="operate">
       <el-button type="danger" @click="reset">重置</el-button>
@@ -28,7 +33,9 @@
 import { ref } from "vue";
 import Child from "@/views/components/ChildView.vue";
 import { useCounterStore, useInfoStore } from "@/stores/counter";
+import { Direction } from "@/config/enum";
 export default {
+  name: "Index",
   components: {
     Child,
   },
@@ -36,6 +43,7 @@ export default {
     const mainMsg = ref(0);
     const store = useCounterStore();
     const infoStore = useInfoStore();
+    const dir = ref(Direction);
     // change mainMsg
     function changeMainMsg() {
       mainMsg.value += 1;
@@ -60,6 +68,7 @@ export default {
       infoStore,
       infoStoreClick,
       reset,
+      dir,
     };
   },
 };
