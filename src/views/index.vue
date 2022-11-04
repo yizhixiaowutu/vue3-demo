@@ -21,7 +21,10 @@
       <!-- TypeScript -->
     </div>
     <div class="operate">
-      <el-button type="danger" @click="reset">重置</el-button>
+      <el-button
+        type="danger"
+        @click="reset"
+      >重置</el-button>
       <el-button @click="changeMainMsg">click me</el-button>
       <el-button @click="storeDouble">Store 点击 Double</el-button>
       <el-button @click="infoStoreClick">InfoStore 点击</el-button>
@@ -30,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Child from "@/views/components/ChildView.vue";
 import { useCounterStore, useInfoStore } from "@/stores/counter";
 import { Direction } from "@/config/enum";
@@ -60,6 +63,10 @@ export default {
       console.log("重置了");
       infoStore.$reset();
     }
+    onMounted(() => {
+      const reg = /\bcode\b/.test("bar code");
+      console.log("reg: ", reg);
+    });
     return {
       mainMsg,
       store,
