@@ -74,6 +74,7 @@ export default {
       console.log("feature_test_commit", "第三次提交");
       console.log("feature_test_commit", "第四次提交");
       console.log("feature_test_commit", "第五次提交");
+      console.log("feature_test_commit", "联调测试阶段修复若干bug");
     });
     return {
       mainMsg,
