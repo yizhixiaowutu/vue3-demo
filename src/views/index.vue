@@ -69,6 +69,13 @@ export default {
     onMounted(() => {
       const reg = /\bcode\b/.test("bar code");
       console.log("reg: ", reg);
+      console.log("feature_test_commit", "第一次提交");
+      console.log("feature_test_commit", "第二次提交");
+      console.log("feature_test_commit", "第三次提交");
+      console.log("feature_test_commit", "第四次提交");
+      console.log("feature_test_commit", "第五次提交");
+      console.log("feature_test_commit", "联调测试阶段修复若干bug");
+      console.log("feature_test_commit", "联调测试阶段调整部分样式");
     });
     return {
       mainMsg,
