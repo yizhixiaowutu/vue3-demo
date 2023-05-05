@@ -60,9 +60,6 @@ export default {
       infoStore.isAdmin = !infoStore.isAdmin;
     }
     function reset() {
-      console.log("git 1");
-      console.log("git 2");
-      console.log("git 3");
       console.log("重置了");
       infoStore.$reset();
     }
