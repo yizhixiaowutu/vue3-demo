@@ -3,16 +3,18 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";
-import ElementPlus from "element-plus";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
+import Antd from "ant-design-vue";
 
-import "element-plus/dist/index.css";
+// css
+import "ant-design-vue/dist/reset.css";
+import "tailwindcss/tailwind.css";
 import "./assets/main.css";
+import "@/styles/tailwind.css";
+import "@/styles/index.scss";
 
 const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-app.use(ElementPlus, { locale: zhCn });
-
+app.use(Antd);
 app.mount("#app");
