@@ -11,6 +11,12 @@
     <div class="operate">
       <el-button @click="click">Child Click</el-button>
     </div>
+    <div class="css-model">
+      <div class="css-model-block"></div>
+      <div class="css-model-block bg-linear"></div>
+      <div class="css-model-block bg-radial"></div>
+      <div class="css-model-block bg-sanjiao"></div>
+    </div>
   </div>
 </template>
 
@@ -29,7 +35,7 @@ function click() {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .child {
   padding: 2rem;
   margin: 2rem;
@@ -38,5 +44,28 @@ function click() {
 }
 .operate {
   margin: 10px 0;
+}
+.css-model {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  .css-model-block {
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    // background-color: transparent;
+  }
+  // 线性渐变
+  .bg-linear {
+    background: linear-gradient(#fff, #000);
+  }
+  // 径向渐变
+  .bg-radial {
+    background: radial-gradient(#fff, #000);
+  }
+  // 三角
+  .bg-sanjiao {
+    background: linear-gradient(#f00 0%, #f00 50%, #fff 50%, #fff 100%);
+  }
 }
 </style>
