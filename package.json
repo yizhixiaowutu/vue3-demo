@@ -13,6 +13,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@antv/g6": "^4.8.22",
     "ant-design-vue": "4.x",
     "pinia": "^2.0.21",
     "vue": "^3.2.38",
