@@ -13,6 +13,16 @@ const router = createRouter({
       name: "g6",
       component: () => import("@/views/g6.vue"),
     },
+    {
+      path: "/single-iframe",
+      name: "single-iframe",
+      component: () => import("@/views/single-iframe/main.vue"),
+    },
+    {
+      path: "/iframe-page",
+      name: "iframe-page",
+      component: () => import("@/views/single-iframe/iframe.vue"),
+    },
   ],
 });
 
