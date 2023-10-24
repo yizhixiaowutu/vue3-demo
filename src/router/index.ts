@@ -23,6 +23,11 @@ const router = createRouter({
       name: "iframe-page",
       component: () => import("@/views/single-iframe/iframe.vue"),
     },
+    {
+      path: "/file-saver",
+      name: "file-saver",
+      component: () => import("@/views/file-saver/index.vue"),
+    },
   ],
 });
 
