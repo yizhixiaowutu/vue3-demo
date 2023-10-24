@@ -1,22 +1,31 @@
 <template>
-  <div class="parent">
-    <div class="header">
-      <h1 class="font-sans text-base">This is Main Page</h1>
-      <Input v-model="value"></Input>
+  <div class="main-page">
+    <div class="router-btn">
+      <a-button @click="toG6">g6路由</a-button>
+      <a-button @click="toFileSaver">file-saver路由</a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Input } from "ant-design-vue";
-import { ref } from "vue";
+import router from "@/router";
 
-const value = ref("");
+const toG6 = () => {
+  router.push("/g6");
+};
+const toFileSaver = () => {
+  router.push("/file-saver");
+};
 </script>
 
-<style scoped>
-.parent {
-  background-color: #d4d7de;
+<style lang="scss" scoped>
+.main-page {
+  /* background-color: #d4d7de; */
   padding: 1rem;
+  .router-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 }
 </style>
