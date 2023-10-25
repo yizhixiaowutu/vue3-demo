@@ -8,190 +8,132 @@
 import G6, { Graph } from "@antv/g6";
 import type { ModelConfig, EdgeConfig, IG6GraphEvent, Item } from "@antv/g6";
 import { onMounted, reactive, ref } from "vue";
-import demoJson from "./demo.json";
-console.log("demoJson", demoJson);
-// 传入数据
-const originData = [
-  {
-    sopNodeCode: "SOPNODE20231019LHCBD7P8",
-    processCode: "8a769500727d1cae01727d1caf270001",
-    processType: 0,
-    processName: "立单环节",
-    nextNodeList: ["SOPNODE20231019TJUXRFYN"],
-    triggerList: [
-      {
-        sopNodeCode: "SOPNODE20231019LHCBD7P8",
-        triggerCode: "TRIGGER20231019QK0AGEAF",
-        triggerName: "跳转立单采集环节",
-        nextNodeList: ["SOPNODE20231019TJUXRFYN"],
-      },
-    ],
-  },
-  {
-    sopNodeCode: "SOPNODE20231019JBTT9U2I",
-    processCode: "8a769500727d1cae01727d1d617f0007",
-    processType: 99,
-    processName: "结束环节",
-    nextNodeList: null,
-    triggerList: [
-      {
-        sopNodeCode: "SOPNODE20231019JBTT9U2I",
-        triggerCode: "TRIGGER202310190GNHGKN2",
-        triggerName: "关单",
-        nextNodeList: null,
-      },
-    ],
-  },
-  {
-    sopNodeCode: "SOPNODE20231019SGJUI0AJ",
-    processCode: "8a769500727d1cae01727d1da238000d",
-    processType: 999,
-    processName: "全局环节",
-    nextNodeList: null,
-    triggerList: null,
-  },
-  {
-    sopNodeCode: "SOPNODE20231019TJUXRFYN",
-    processCode: "HJ202310191W2JYS0I",
-    processType: 1,
-    processName: "立单采集",
-    nextNodeList: ["SOPNODE202310193QGYKQBY"],
-    triggerList: [
-      {
-        sopNodeCode: "SOPNODE20231019TJUXRFYN",
-        triggerCode: "TRIGGER20231019MEOSGF2Y",
-        triggerName: "111",
-        nextNodeList: ["SOPNODE202310193QGYKQBY"],
-      },
-    ],
-  },
-  {
-    sopNodeCode: "SOPNODE202310193QGYKQBY",
-    processCode: "HJ20231019JXNJHGVO",
-    processType: 10,
-    processName: "自定义1",
-    nextNodeList: ["SOPNODE20231019JBTT9U2I"],
-    triggerList: [
-      {
-        sopNodeCode: "SOPNODE202310193QGYKQBY",
-        triggerCode: "TRIGGER202310197ARNBAUY",
-        triggerName: "999",
-        nextNodeList: ["SOPNODE20231019JBTT9U2I"],
-      },
-    ],
-  },
-];
+import { sop1 } from "./sop.js";
+
+interface SopNode {
+  sopNodeCode: string;
+  processCode: string;
+  processType: string;
+  processName: string;
+  nextNodeList: string[];
+  triggerList: TriggerNode[];
+}
+interface TriggerNode {
+  sopNodeCode: string;
+  triggerCode: string;
+  triggerName: string;
+  nextNodeList: string[];
+}
 
 // <{ nodes: ModelConfig[]; edges: EdgeConfig[] }>
 const sopNodeData = reactive<{ nodes: any[]; edges: any[] }>({
   nodes: [],
   edges: [],
 });
-sopNodeData.nodes = demoJson.nodes;
-sopNodeData.edges = demoJson.edges;
-// sopNodeData.nodes = originData.map((item, index) => {
-//   return {
-//     id: item.sopNodeCode,
-//     label: item.processName,
-//     // x: 150 * (index + 1),
-//     // y: 150,
-//   };
-// });
-// sopNodeData.edges = originData
-//   .filter((i) => i.nextNodeList?.length)
-//   .map((item) => {
-//     return {
-//       source: item.sopNodeCode,
-//       target: item.nextNodeList?.[0],
-//       label: item.triggerList?.[0].triggerName,
-//       labelCfg: {
-//         autoRotate: true,
-//       },
-//     };
-//   });
 
-const miniMap = new G6.Minimap({
-  size: [100, 100],
-  className: "minimap",
-  type: "delegate",
-});
+const handleSopNodeList = (sopList: SopNode[]) => {
+  const nodes = [] as any[];
+  const edges = [] as any[];
+  // 处理源数据
+  sopList.forEach((node: SopNode) => {
+    const { sopNodeCode, processName, nextNodeList, triggerList } = node;
+
+    // 创建节点对象
+    const nodeObj = {
+      id: sopNodeCode,
+      label: processName,
+      triggerList: triggerList,
+    };
+    nodes.push(nodeObj);
+
+    if (nextNodeList && nextNodeList.length > 0) {
+      // 遍历nextNodeList创建边对象
+      nextNodeList.forEach((nextNode) => {
+        const edge = {
+          source: sopNodeCode,
+          target: nextNode,
+          label: "",
+        };
+
+        // 查找对应的触发器信息
+        const trigger = triggerList.find(
+          (trigger: any) =>
+            trigger.sopNodeCode === sopNodeCode &&
+            trigger.nextNodeList[0] === nextNode
+        );
+
+        if (trigger) {
+          edge.label = trigger.triggerName;
+        }
+
+        edges.push(edge);
+      });
+    }
+  });
+  return { nodes, edges };
+};
+
 const grid = new G6.Grid();
 onMounted(() => {
+  sopNodeData.edges = handleSopNodeList(sop1).edges;
+  sopNodeData.nodes = handleSopNodeList(sop1).nodes;
   handleNodesAndEdges();
   createGraph();
 });
 
 const handleNodesAndEdges = () => {
+  let maxWeight = 0;
+  sopNodeData.nodes.forEach((node) => {
+    if (node.label.length * 10 > maxWeight) {
+      maxWeight = node.label.length * 10;
+    }
+  });
   sopNodeData.nodes.forEach((node) => {
     if (!node.style) {
       node.style = {};
     }
-    node.style.lineWidth = 1;
-    node.style.stroke = "#666";
-    node.style.fill = "steelblue";
-    switch (node.class) {
-      case "c0": {
-        node.type = "circle";
-        node.size = 30;
-        break;
-      }
-      case "c1": {
-        node.type = "rect";
-        node.size = [35, 20];
-        break;
-      }
-      case "c2": {
-        node.type = "ellipse";
-        node.size = [35, 20];
-        break;
-      }
-    }
+    node.style.lineWidth = 5;
+    node.style.stroke = "RGBA(180, 216, 252, 1.00)";
+    node.size = maxWeight;
   });
   sopNodeData.edges.forEach((edge) => {
     if (!edge.style) {
       edge.style = {};
     }
-    edge.style.lineWidth = edge.weight;
-    edge.style.opacity = 0.6;
-    edge.style.stroke = "grey";
+    edge.style.lineWidth = edge?.weight || 2;
+    edge.style.stroke = "rgba(88, 181, 230, 1.00)";
   });
 };
 // 实例化 Image Minimap 插件
-const imageMinimap = new G6.ImageMinimap({
-  width: 200,
-  graphImg:
-    "https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*eD7nT6tmYgAAAAAAAAAAAABkARQnAQ",
-});
 const createGraph = () => {
   const graph = new G6.Graph({
     container: "container",
-    plugins: [
-      // miniMap,
-      imageMinimap,
-      grid,
-    ],
+    plugins: [grid],
     width: 800,
     height: 600,
     animate: true,
-    // fitView: true,
+    fitView: true,
     defaultNode: {
+      type: "ellipse",
       labelCfg: {
         style: {
-          fill: "#fff",
+          fill: "RGBA(66, 158, 250, 1.00)",
+          fontSize: 20,
         },
       },
     },
     defaultEdge: {
       labelCfg: {
         autoRotate: true,
+        fontSize: 16,
+      },
+      style: {
+        endArrow: true,
       },
     },
     layout: {
-      type: "force",
-      linkDistance: 100,
-      preventOverlap: true,
-      nodeStrength: -30,
-      edgeStrength: 0.1,
+      type: "dagre",
+      nodesep: 100,
     },
     modes: {
       default: [
@@ -200,24 +142,24 @@ const createGraph = () => {
         "drag-node",
         {
           type: "tooltip",
-          formatText(model) {
-            const text =
-              "label: " + model.label + "<br/> class: " + model.class;
+          formatText(node: any) {
+            let text = "";
+            text = "环节: " + node.label + "<br/>";
+            if (node.triggerList?.length > 0) {
+              text += "触发器列表:<br/>";
+              text += (node?.triggerList as TriggerNode[])
+                ?.map((trigger, index) => {
+                  return `${index + 1}: ${trigger.triggerName}<br/>`;
+                })
+                .join("");
+            }
             return text;
           },
         },
         {
           type: "edge-tooltip",
-          formatText(model) {
-            // 边提示框文本内容
-            const text =
-              "source: " +
-              model.source +
-              "<br/> target: " +
-              model.target +
-              "<br/> weight: " +
-              model.weight;
-            return text;
+          formatText(edge) {
+            return (edge?.label as string) || "";
           },
         },
       ],
@@ -242,12 +184,12 @@ const createGraph = () => {
 
   // 监听鼠标进入节点
   graph.on("node:mouseenter", (e) => {
-    const nodeItem = e.item; // 获取鼠标进入的节点元素对象
+    const nodeItem = e.item as Item; // 获取鼠标进入的节点元素对象
     graph.setItemState(nodeItem, "hover", true); // 设置当前节点的 hover 状态为 true
   });
   // 监听鼠标离开节点
   graph.on("node:mouseleave", (e) => {
-    const nodeItem = e.item; // 获取鼠标离开的节点元素对象
+    const nodeItem = e.item as Item; // 获取鼠标离开的节点元素对象
     graph.setItemState(nodeItem, "hover", false); // 设置当前节点的 hover 状态为 false
   });
   // 点击节点
@@ -257,7 +199,7 @@ const createGraph = () => {
     clickNodes.forEach((cn) => {
       graph.setItemState(cn, "click", false);
     });
-    const nodeItem = e.item; // 获取被点击的节点元素对象
+    const nodeItem = e.item as Item; // 获取被点击的节点元素对象
     graph.setItemState(nodeItem, "click", true); // 设置当前节点的 click 状态为 true
   });
 
@@ -268,7 +210,7 @@ const createGraph = () => {
     clickEdges.forEach((ce) => {
       graph.setItemState(ce, "click", false);
     });
-    const edgeItem = e.item; // 获取被点击的边元素对象
+    const edgeItem = e.item as Item; // 获取被点击的边元素对象
     graph.setItemState(edgeItem, "click", true); // 设置当前边的 click 状态为 true
   });
 };
