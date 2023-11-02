@@ -15,6 +15,9 @@
         >
         </a-tab-pane>
       </a-tabs>
+      <div class="other">
+        <a-button @click="toOther">去其他页面</a-button>
+      </div>
     </div>
     <div class="iframe-container grow shrink">
       <iframe
@@ -28,7 +31,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import router from "@/router";
 const url = ref("http://127.0.0.1:5173/iframe-page");
 const panes = ref<
   { title: string; content: string; key: string; closable?: boolean }[]
@@ -40,6 +44,10 @@ const panes = ref<
 const iframeRef = ref();
 
 const activeKey = ref(panes.value[0].key);
+
+onMounted(() => {
+  console.log("加载了");
+});
 
 const add = () => {
   activeKey.value = `${panes.value.length + 1}`;
@@ -79,9 +87,15 @@ const onEdit = (targetKey: string | MouseEvent, action: string) => {
 const onChange = (activeKey: string) => {
   postMessage("change", activeKey);
 };
-const postMessage = (type: string, activeKey) => {
+const postMessage = (type: string, activeKey: string) => {
   if (!iframeRef.value) return;
   iframeRef.value?.contentWindow.postMessage({ type, activeKey }, "*");
+};
+const toOther = () => {
+  console.log("qqq");
+  router.push({
+    name: "g6",
+  });
 };
 </script>
 <style lang="scss" scoped>
@@ -90,7 +104,7 @@ const postMessage = (type: string, activeKey) => {
   height: 100%;
 
   .tab-list-container {
-    height: 40px;
+    // height: 40px;
     border: 1px solid rgb(209 213 219);
   }
   .iframe-container {

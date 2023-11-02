@@ -36,12 +36,15 @@ const activeKeyRef = ref(contentList.value[0].value);
 
 onMounted(() => {
   window.addEventListener("message", receiveMessage);
+  console.log("onMounted");
+  window.postMessage("IframePageMounted", "http://localhost:3333/srs");
 });
 onBeforeMount(() => {
   window.removeEventListener("message", receiveMessage);
 });
 
 const receiveMessage = (event: MessageEvent) => {
+  if (event.origin !== "http://127.0.0.1:5173") return;
   const {
     data: { activeKey, type },
   } = event;
