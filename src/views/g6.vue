@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-// import G6, { Graph } from "@antv/g6";
+import G6, { Graph } from "@antv/g6";
 import type { ModelConfig, EdgeConfig, IG6GraphEvent, Item } from "@antv/g6";
 import { onMounted, reactive, ref } from "vue";
 import { sop1, sop3, demoJson } from "./sop.js";
@@ -76,15 +76,15 @@ const handleSopNodeList = (sopList: SopNode[]) => {
 
 const grid = new G6.Grid();
 onMounted(() => {
-  initG6();
-  // createGraph();
-  // sopNodeData.edges = handleSopNodeList(sop1).edges;
-  // sopNodeData.nodes = handleSopNodeList(sop1).nodes;
-  // sopNodeData.edges = handleSopNodeList(sop3).edges;
-  // sopNodeData.nodes = handleSopNodeList(sop3).nodes;
-  // handleNodesAndEdges();
-  // renderGraph();
-  // console.log("ss", sopNodeData);
+  // initG6();
+  createGraph();
+  sopNodeData.edges = handleSopNodeList(sop1).edges;
+  sopNodeData.nodes = handleSopNodeList(sop1).nodes;
+  sopNodeData.edges = handleSopNodeList(sop3).edges;
+  sopNodeData.nodes = handleSopNodeList(sop3).nodes;
+  handleNodesAndEdges();
+  renderGraph();
+  console.log("ss", sopNodeData);
 });
 
 const handleNodesAndEdges = () => {
