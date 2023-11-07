@@ -28,6 +28,11 @@ const router = createRouter({
       name: "file-saver",
       component: () => import("@/views/file-saver/index.vue"),
     },
+    {
+      path: "/element-plus",
+      name: "element-plus",
+      component: () => import("@/views/element-plus/index.vue"),
+    },
   ],
 });
 

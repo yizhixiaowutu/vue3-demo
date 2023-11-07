@@ -3,6 +3,7 @@
     <div class="router-btn">
       <a-button @click="toG6">g6路由</a-button>
       <a-button @click="toFileSaver">file-saver路由</a-button>
+      <a-button @click="toElementPlus">element-plus路由</a-button>
     </div>
   </div>
 </template>
@@ -15,6 +16,9 @@ const toG6 = () => {
 };
 const toFileSaver = () => {
   router.push("/file-saver");
+};
+const toElementPlus = () => {
+  router.push("/element-plus");
 };
 </script>
 
