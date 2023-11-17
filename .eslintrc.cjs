@@ -26,4 +26,8 @@ module.exports = {
       },
     ],
   },
+  "prettier/prettier": [
+    "warn",
+    { singleQuote: true, semi: false },
+  ],
 };
