@@ -15,78 +15,78 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from "vue";
-import Form from "./form.vue";
-const contentListRef = ref<HTMLElement | null>(null);
+import { onBeforeMount, onMounted, ref } from 'vue'
+import Form from './form.vue'
+const contentListRef = ref<HTMLElement | null>(null)
 const contentList = ref([
   {
-    label: "content-1",
+    label: 'content-1',
     value: 1,
   },
   {
-    label: "content-2",
+    label: 'content-2',
     value: 2,
   },
   {
-    label: "content-3",
+    label: 'content-3',
     value: 3,
   },
-]);
-const activeKeyRef = ref(contentList.value[0].value);
+])
+const activeKeyRef = ref(contentList.value[0].value)
 
 onMounted(() => {
-  window.addEventListener("message", receiveMessage);
-  console.log("onMounted");
-  window.postMessage("IframePageMounted", "http://localhost:3333/srs");
-});
+  window.addEventListener('message', receiveMessage)
+  console.log('onMounted')
+  // window.postMessage("IframePageMounted", "http://localhost:3333/srs");
+})
 onBeforeMount(() => {
-  window.removeEventListener("message", receiveMessage);
-});
+  window.removeEventListener('message', receiveMessage)
+})
 
 const receiveMessage = (event: MessageEvent) => {
-  if (event.origin !== "http://127.0.0.1:5173") return;
+  if (event.origin !== 'http://127.0.0.1:5173') return
   const {
     data: { activeKey, type },
-  } = event;
-  if (type === "add") {
-    add(activeKey);
-  } else if (type === "remove") {
-    remove(activeKey);
-  } else if (type === "change") {
-    change(activeKey);
+  } = event
+  if (type === 'add') {
+    add(activeKey)
+  } else if (type === 'remove') {
+    remove(activeKey)
+  } else if (type === 'change') {
+    change(activeKey)
   }
-};
+}
 const add = (activeKey: string) => {
-  activeKeyRef.value = +activeKey;
+  activeKeyRef.value = +activeKey
   const has = contentList.value.some(
     (content) => content.value === activeKeyRef.value
-  );
-  if (has) return;
+  )
+  if (has) return
   contentList.value.push({
     label: `content-${activeKeyRef.value}`,
     value: +activeKeyRef.value,
-  });
-};
+  })
+}
 const remove = (activeKey: string) => {
-  console.log("remove", activeKey);
-  let lastIndex = 0;
+  console.log('remove', activeKey)
+  let lastIndex = 0
   contentList.value.forEach((content, i) => {
     if (content.value === +activeKey) {
-      lastIndex = i - 1;
+      lastIndex = i - 1
     }
-  });
+  })
   contentList.value = contentList.value.filter(
     (content) => content.value !== +activeKey
-  );
+  )
   if (lastIndex >= 0) {
-    activeKeyRef.value = contentList.value[lastIndex].value;
+    activeKeyRef.value = contentList.value[lastIndex].value
   } else {
-    activeKeyRef.value = contentList.value[0].value;
+    activeKeyRef.value = contentList.value[0].value
   }
-};
+}
 const change = (activeKey: string) => {
-  activeKeyRef.value = +activeKey;
-};
+  activeKeyRef.value = +activeKey
+}
 </script>
 <style scoped lang="scss">
 .iframe-page {
