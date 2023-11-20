@@ -1,5 +1,5 @@
 // 键值对 Number -> string
-class Pair {
+export class Pair {
   key: number
   value: string
 
@@ -18,7 +18,28 @@ class ArrayHashMap {
     this.buckets = new Array(100)
   }
 
+  // 哈希函数
   private hashFunc(key: number): number {
     return key % 100
+  }
+
+  // 查询
+  public get(key: number): string | null {
+    const index = this.hashFunc(key)
+    const pair = this.buckets[index]
+    if (!pair) return null
+    return pair.value
+  }
+
+  // 插入
+  public set(key: number, value: string): void {
+    const index = this.hashFunc(key)
+    this.buckets[index] = new Pair(key, value)
+  }
+
+  // 删除
+  public delete(key: number): void {
+    const index = this.hashFunc(key)
+    this.buckets[index] = null // 将桶置空
   }
 }
