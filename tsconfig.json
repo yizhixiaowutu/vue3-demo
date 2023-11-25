@@ -12,6 +12,7 @@
     }
   ],
   "compilerOptions": {
-    "target": "ES6"
+    "target": "ES6",
+    "importsNotUsedAsValues": "remove"
   }
 }

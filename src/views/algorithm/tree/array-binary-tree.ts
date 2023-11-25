@@ -20,11 +20,13 @@ class ArrayBinaryTree {
 
   // 获取索引为 i 的节点的左子节点
   left(i: number): number {
+    console.log('left', i, 2 * i + 1)
     return 2 * i + 1
   }
 
   // 获取索引为 i 的节点的右子节点
   right(i: number): number {
+    console.log('right', i, 2 * i + 2)
     return 2 * i + 2
   }
 
@@ -47,6 +49,7 @@ class ArrayBinaryTree {
     if (this.val(i) === null) return
     // 前序遍历
     if (order === 'pre') {
+      console.log('前序-push', this.val(i))
       res.push(this.val(i))
     }
     this.dfs(this.left(i), order, res)
