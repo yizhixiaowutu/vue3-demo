@@ -43,6 +43,12 @@ const router = createRouter({
       name: 'store-page',
       component: () => import('@/views/iframe-store/page.vue'),
     },
+    {
+      // 动态渲染 component
+      path: '/array-component',
+      name: 'array-component',
+      component: () => import('@/views/array-component/index.vue'),
+    },
   ],
 })
 
