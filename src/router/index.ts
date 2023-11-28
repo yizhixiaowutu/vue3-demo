@@ -49,6 +49,12 @@ const router = createRouter({
       name: 'array-component',
       component: () => import('@/views/array-component/index.vue'),
     },
+    {
+      // 尝试一些好玩的
+      path: '/demo',
+      name: 'demo',
+      component: () => import('@/views/demo/index.vue'),
+    },
   ],
 })
 
