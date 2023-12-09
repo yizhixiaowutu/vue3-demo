@@ -28,6 +28,7 @@ function twoSumHash(nums: number[], target: number): number[] {
   }
   return []
 }
+// TODO: 如何返回所有解?
 const nums = [2, 7, 11, 15]
 const t = 13
 console.log('twoSumBruteForce', twoSumBruteForce(nums, t)) // [0, 2]
