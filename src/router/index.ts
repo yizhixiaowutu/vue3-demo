@@ -55,6 +55,23 @@ const router = createRouter({
       name: 'demo',
       component: () => import('@/views/demo/index.vue'),
     },
+    {
+      // css 学习
+      path: '/css-page',
+      name: 'css-page',
+      // component: () => import('@/views/css-page/index.vue'),
+      children: [
+        {
+          path: '/',
+          component: () => import('@/views/css-page/index.vue'),
+        },
+        {
+          path: '/css-page/background',
+          name: 'background',
+          component: () => import('@/views/css-page/background.vue'),
+        },
+      ],
+    },
   ],
 })
 
