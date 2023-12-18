@@ -70,6 +70,11 @@ const router = createRouter({
           name: 'background',
           component: () => import('@/views/css-page/background.vue'),
         },
+        {
+          path: '/css-page/mask',
+          name: 'mask',
+          component: () => import('@/views/css-page/mask.vue'),
+        },
       ],
     },
   ],
