@@ -57,23 +57,38 @@ const router = createRouter({
     },
     {
       // css 学习
-      path: '/css-page',
-      name: 'css-page',
-      // component: () => import('@/views/css-page/index.vue'),
+      path: '/css',
+      name: 'css',
       children: [
         {
           path: '/',
           component: () => import('@/views/css-page/index.vue'),
         },
         {
-          path: '/css-page/background',
+          path: '/css/background',
           name: 'background',
           component: () => import('@/views/css-page/background.vue'),
         },
         {
-          path: '/css-page/mask',
+          path: '/css/mask',
           name: 'mask',
           component: () => import('@/views/css-page/mask.vue'),
+        },
+      ],
+    },
+    {
+      // source-code 源码学习相关
+      path: '/source-code',
+      name: 'source-code',
+      children: [
+        {
+          path: '/',
+          component: () => import('@/views/source-code/index.vue'),
+        },
+        {
+          path: '/source-code/vNode',
+          name: 'vNode',
+          component: () => import('@/views/source-code/components/vNode.vue'),
         },
       ],
     },
