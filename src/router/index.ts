@@ -32,6 +32,28 @@ const router = createRouter({
       path: '/element-plus',
       name: 'element-plus',
       component: () => import('@/views/element-plus/index.vue'),
+      children: [
+        {
+          path: '/element-plus/c1',
+          name: 'element-plus/c1',
+          component: () => import('@/views/element-plus/components/c1.vue'),
+        },
+        {
+          path: '/element-plus/c2',
+          name: 'element-plus/c2',
+          component: () => import('@/views/element-plus/components/c2.vue'),
+        },
+        {
+          path: '/element-plus/c3',
+          name: 'element-plus/c3',
+          component: () => import('@/views/element-plus/components/c4.vue'),
+        },
+        {
+          path: '/element-plus/c4',
+          name: 'element-plus/c4',
+          component: () => import('@/views/element-plus/components/c4.vue'),
+        },
+      ],
     },
     {
       path: '/store-main',
