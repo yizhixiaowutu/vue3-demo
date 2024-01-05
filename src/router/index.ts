@@ -114,6 +114,12 @@ const router = createRouter({
         },
       ],
     },
+    {
+      // canvas 学习
+      path: '/canvas',
+      name: 'canvas',
+      component: () => import('@/views/canvas/index.vue'),
+    },
   ],
 })
 
