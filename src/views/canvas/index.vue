@@ -1,66 +1,151 @@
 <template>
   <div id="canvas-page">
-    <h1>canvas</h1>
     <canvas id="canvas"></canvas>
   </div>
 </template>
-
 <script setup lang="ts">
-import { onBeforeMount, onMounted } from 'vue'
+import { onBeforeMount, onMounted, onUnmounted } from 'vue'
 
-onMounted(() => {
-  const canvas = getCanvas().canvas
-  canvas.width = 400 // 不要使用 css 来设置 canvas 的宽高，否则会导致画布被拉伸
-  canvas.height = 400
-  const context = getCanvas().ctx
+/**
+ * 圆点类
+ */
+class RoundItem {
+  index: number
+  x: number
+  y: number
+  r: number
+  color: string
 
-  // NOTE: 绘制1/4个圆
-  // context.arc(100, 100, 50, 0, 0.5 * Math.PI, false)
-  // context.strokeStyle = 'white'
-  // context.stroke()
+  constructor(index: number, x: number, y: number) {
+    this.index = index
+    this.x = x
+    this.y = y
+    this.r = Math.random() * 2 + 1
+    var alpha = (Math.floor(Math.random() * 10) + 1) / 10 / 2
+    this.color = 'rgba(255,255,255,' + alpha + ')'
+  }
 
-  // NOTE: 绘制一条直线
-  // context.beginPath()
-  // context.moveTo(50, 50)
-  // context.lineTo(100, 100)
-  // context.strokeStyle = '#fff'
-  // context.stroke()
+  draw() {
+    context.fillStyle = this.color
+    context.shadowBlur = this.r * 2
+    context.beginPath()
+    context.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false)
+    context.closePath()
+    context.fill()
+  }
 
-  // NOTE: 不使用 moveTo 直接连线
-  // context.lineTo(200, 200)
-  // context.lineTo(200, 100)
-  // context.lineTo(100, 50)
-  // context.strokeStyle = '#fff'
-  // context.stroke()
+  move() {
+    this.y -= 0.25
+    if (this.y <= -10) {
+      this.y = HEIGHT + 10
+    }
+    this.draw()
+  }
+}
 
-  // NOTE: 调整线条宽度及样式
-  // context.beginPath()
-  // context.moveTo(10, 10)
-  // context.lineTo(100, 100)
-  // context.lineWidth = 10
-  // context.lineCap = 'round'
-  // context.strokeStyle = '#fff'
-  // context.stroke()
+const WIDTH = document.documentElement.clientWidth
+const HEIGHT = document.documentElement.clientHeight
+const COUNT = 100 // 初始圆点数量
+const rounds: RoundItem[] = []
+let canvas: HTMLCanvasElement
+let context: CanvasRenderingContext2D
+const circle = {
+  num: 100,
+  color: '', //  颜色  如果是false 则是随机渐变颜色
+  r: 0.9, //   圆每次增加的半径
+  o: 0.09, //      判断圆消失的条件，数值越大，消失的越快
+  a: 1,
+}
+let color1 = 0
+let color2 = ''
+let circleArr: any[] = []
 
-  // NOTE: 绘制矩形
-  // context.beginPath()
-  // context.fillStyle = '#fff'
-  // context.fillRect(10, 10, 100, 100)
-  // context.strokeStyle = '#fff'
-  // context.strokeRect(130, 10, 100, 100)
+onBeforeMount(() => {
+  const app = document.getElementById('app') as HTMLElement
+  app.style.padding = '0' // 设置无边距
+  window.addEventListener('resize', initCanvas)
+  window.onmousemove = function (event) {
+    const mouseX = event.clientX
+    const mouseY = event.clientY
+    circleArr.push({
+      mouseX: mouseX,
+      mouseY: mouseY,
+      r: circle.r, // 设置半径每次增大的数值
+      o: 1, //  判断圆消失的条件，数值越大，消失得越快
+    })
+  }
 
-  // NOTE: 绘制阴影
-  context.beginPath()
-  context.arc(100, 100, 50, 0, 2 * Math.PI, false)
-  context.fillStyle = '#fff'
-  context.shadowBlur = 20
-  context.shadowColor = '#fff'
-  context.fill()
+  if (circle.color) {
+    color2 = circle.color
+  } else {
+    color1 = Math.random() * 360
+  }
 })
+onMounted(() => {
+  initCanvas()
+  mouseAnimate()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', initCanvas)
+})
+const initCanvas = () => {
+  canvas = getCanvas().canvas
+  context = getCanvas().ctx
+  canvas.width = WIDTH
+  canvas.height = HEIGHT
+  initRoundPopulation()
+}
+const initRoundPopulation = () => {
+  for (var i = 0; i < COUNT; i++) {
+    rounds[i] = new RoundItem(i, Math.random() * WIDTH, Math.random() * HEIGHT)
+    rounds[i].draw()
+  }
+  animate()
+}
 const getCanvas = () => {
   const canvas = document.getElementById('canvas') as HTMLCanvasElement
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
   return { canvas, ctx }
+}
+
+const animate = () => {
+  context.clearRect(0, 0, WIDTH, HEIGHT)
+  for (var i in rounds) {
+    rounds[i].move()
+  }
+  requestAnimationFrame(animate)
+}
+
+const mouseAnimate = () => {
+  if (!circle.color) {
+    color1 += 0.1
+    color2 = `hsl(${color1},100%,80%)`
+  }
+  // context.clearRect(0, 0, WIDTH, HEIGHT)
+
+  for (var i = 0; i < circleArr.length; i++) {
+    context.fillStyle = color2
+    context.beginPath()
+    context.arc(
+      circleArr[i].mouseX,
+      circleArr[i].mouseY,
+      circleArr[i].r,
+      0,
+      Math.PI * 2
+    )
+    context.closePath()
+    context.fill()
+    circleArr[i].r += circle.r
+    circleArr[i].o -= circle.o
+
+    if (circleArr[i].o <= 0) {
+      circleArr.splice(i, 1)
+      i--
+    }
+  }
+
+  window.requestAnimationFrame(mouseAnimate)
 }
 </script>
 
