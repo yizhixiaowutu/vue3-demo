@@ -9,7 +9,7 @@
   height: 100vh;
   overflow: auto;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   font-weight: normal;
   background-color:rgba(230,240,240,.4);
 }

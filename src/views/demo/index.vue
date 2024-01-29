@@ -1,10 +1,19 @@
 <template>
   <div id="demo-page" class="demo-page">
+    <div id="vanta-birds" ref="vantaBirdRef"></div>
     <h1>Demo</h1>
     <div class="grid-container">
       <div class="grid-item">
         <span>图片旋转</span>
         <RotateImg />
+      </div>
+      <div class="grid-item">
+        <span>tilt-1</span>
+        <div class="tiltEl tilt-1" data-txq="1"></div>
+      </div>
+      <div class="grid-item">
+        <span>tilt-1</span>
+        <div class="tiltEl tilt-1" data-txq="2"></div>
       </div>
     </div>
     <h1>canvas</h1>
@@ -14,12 +23,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import RotateImg from './rotate-img.vue'
 import { ElMessage } from 'element-plus'
+import VanillaTilt from 'vanilla-tilt'
+import BIRDS from 'vanta/dist/vanta.birds.min'
 
 const canvasReactive = reactive({
   count: 0,
+})
+const vantaBirdRef = ref(null)
+const vantaBirdEffect = reactive({
+  ref: vantaBirdRef,
+  effect: null,
 })
 
 onMounted(() => {
@@ -30,7 +46,30 @@ onMounted(() => {
       nextCanvasFunc()
     }
   }
+
+  // NOTE: tilt
+  initTilt()
+  vantaBirds()
 })
+
+const initTilt = () => {
+  const arr = document.querySelectorAll('.tiltEl')
+  console.log('arr', arr, arr[1].attributes)
+  const els = Array.from(document.querySelectorAll('.tilt-1')) as HTMLElement[]
+  VanillaTilt.init(els, {
+    max: 40,
+    scale: 1.1,
+    glare: true,
+    'max-glare': 0.5,
+    reset: false,
+  })
+}
+
+const vantaBirds = () => {
+  vantaBirdEffect.effect = BIRDS({
+    el: vantaBirdEffect.ref,
+  })
+}
 
 const nextCanvasFunc = () => {
   const func = `canvasFunc${canvasReactive.count}`
@@ -238,5 +277,28 @@ h1 {
   50% {
     opacity: 0.9;
   }
+}
+
+.tiltEl {
+  width: 100px;
+  height: 100px;
+  background: #c6ffdd; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f7797d,
+    #fbd786,
+    #c6ffdd
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f7797d,
+    #fbd786,
+    #c6ffdd
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#vanta-birds {
+  width: 100%;
+  height: 100vh;
 }
 </style>

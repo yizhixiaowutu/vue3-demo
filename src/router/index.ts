@@ -120,6 +120,12 @@ const router = createRouter({
       name: 'canvas',
       component: () => import('@/views/canvas/index.vue'),
     },
+    {
+      // blog
+      path: '/blog',
+      name: 'blog',
+      component: () => import('@/views/blog/main.vue'),
+    },
   ],
 })
 
