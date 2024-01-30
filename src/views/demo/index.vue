@@ -1,6 +1,6 @@
 <template>
   <div id="demo-page" class="demo-page">
-    <div id="vanta-birds" ref="vantaBirdRef"></div>
+    <!-- <div id="vanta-birds" ref="vantaBirdRef"></div> -->
     <h1>Demo</h1>
     <div class="grid-container">
       <div class="grid-item">
@@ -15,6 +15,10 @@
         <span>tilt-1</span>
         <div class="tiltEl tilt-1" data-txq="2"></div>
       </div>
+      <div class="grid-item">
+        <span>shadowDOM</span>
+        <shadow-dom />
+      </div>
     </div>
     <h1>canvas</h1>
     <div class="grid-container canvas-container"></div>
@@ -28,6 +32,9 @@ import RotateImg from './rotate-img.vue'
 import { ElMessage } from 'element-plus'
 import VanillaTilt from 'vanilla-tilt'
 import BIRDS from 'vanta/dist/vanta.birds.min'
+
+// components
+import ShadowDom from './components/shadowDom.vue'
 
 const canvasReactive = reactive({
   count: 0,
@@ -49,7 +56,7 @@ onMounted(() => {
 
   // NOTE: tilt
   initTilt()
-  vantaBirds()
+  // vantaBirds()
 })
 
 const initTilt = () => {
@@ -224,6 +231,7 @@ const canvasFunc7 = () => {
 
 <style lang="scss" scoped>
 #demo-page {
+  padding: 20px;
   // background: linear-gradient(to bottom, #000000 0%, #5788fe 100%);
 
   .grid-container {
