@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form id="form">
+    <div>账号： <input type="text" name="username" id="username"></div>
+    <div>密码： <input type="password" name="password" id="password"></div>
+    <button type="submit">登录</button>
+  </form>
+</body>
+
+</html>
+
+<script>
+  const form = document.getElementById('form')
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const username = document.getElementById('username').value
+    const password = document.getElementById('password').value
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    }).then(res => res.json()).then(res => {
+      console.log('login-res', res);
+      if (res.status === 0) {
+        window.location.href = '/pages/index.html'
+      } else {
+        alert(res.msg)
+      }
+    })
+  })
+</script>

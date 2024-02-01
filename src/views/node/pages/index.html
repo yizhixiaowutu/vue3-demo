@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+  <div id="wrap"></div>
+  <h1>一段测试文本</h1>
+  <button id="btnLogout">退出登录</button>
+</body>
+
+</html>
+<script src="./index.js"></script>
+<script>
+  fetch('/api/username', {
+    method: 'POST'
+  }).then((res) => res.json()).then(res => {
+    if (res.status == -1) {
+      alert(res.msg)
+      window.location.href = '/pages/login.html'
+    } else {
+      alert('欢迎回来，' + res.username)
+    }
+  })
+  const btnLogout = document.getElementById('btnLogout')
+  btnLogout.addEventListener('click', () => {
+    // window.localStorage.removeItem('token')
+    // window.location.href = '/login'
+    fetch('/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then(res => res.json()).then((res) => {
+      if (res.status == 0) {
+        console.log('yes');
+        window.location.href = '/pages/login.html'
+      } else {
+        alert(res.msg)
+      }
+    })
+  })
+
+</script>
