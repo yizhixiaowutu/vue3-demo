@@ -1,17 +1,14 @@
 const db = require('../db/index')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+const config = require('../config')
 
 const sql_query_user_exist = 'select * from ev_users where username = ?' // 查询用户是否存在
 const sql_insert_user = 'insert into ev_users set ?' // 插入用户
 
 const register = (req, res) => {
   const userinfo = req.body
-  if (!userinfo.username || !userinfo.password) {
-    return res.send({
-      status: -1,
-      msg: 'username or password is required',
-    })
-  }
   // 执行数据库查询
   db.query(sql_query_user_exist, [userinfo.username], (err, results) => {
     if (err) {
@@ -25,11 +22,14 @@ const register = (req, res) => {
     // 加密密码
     insertUser({
       username: userinfo.username,
-      password: bcrypt.hashSync(userinfo.password, 10)
+      password: bcrypt.hashSync(userinfo.password, 10),
+      email: userinfo?.email,
+      nickname: userinfo?.nickname,
+      user_pic: userinfo?.user_pic
     }).then(() => {
       return res.send({
         status: 200,
-        msg: 'register is ok',
+        msg: 'register successful',
       })
     }).catch(err => {
       return res.handlerError(err.message)
@@ -38,10 +38,33 @@ const register = (req, res) => {
 }
 
 const login = (req, res) => {
-  return res.send({
-    status: 200,
-    msg: 'login is ok',
+  const userinfo = req.body
+  db.query(sql_query_user_exist, [userinfo.username], (err, results) => {
+    if (err) {
+      return res.handlerError(err)
+    }
+    if (results.length !== 1) {
+      return res.handlerError('username is not exist')
+    }
+    const compareResult = bcrypt.compareSync(userinfo.password, results[0].password)
+    if (!compareResult) {
+      return res.handlerError('password is incorrect')
+    }
+
+    const user = {
+      ...results[0],
+      password: ''
+    }
+    const tokenStr = jwt.sign(user, config.JWT_SECRET_KEY, {
+      expiresIn: config.EXPIRES_IN
+    })
+    return res.send({
+      status: 200,
+      msg: 'login successful',
+      token: 'Bearer ' + tokenStr,
+    })
   })
+
 }
 
 // 插入用户

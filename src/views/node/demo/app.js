@@ -1,8 +1,9 @@
 const express = require('express')
 const cors = require('cors')
+const { expressjwt: expressJwt } = require('express-jwt')
 
-const userRouter = require('./router/user')
 const errorHandler = require('./handler/error')
+const config = require('./config')
 
 const app = express()
 
@@ -14,18 +15,31 @@ app.use((req, res, next) => {
   errorHandler.handlerError(req, res, next)
 }) // 错误处理中间件
 
-// app.use((req, res, next) => {
-//   res.handlerError = function (err, status = -1) {
-//     res.send({
-//       status,
-//       msg: err instanceof Error ? err.message : err
-//     })
-//   }
-//   next()
-// })
+
+app.use(expressJwt({
+  secret: config.JWT_SECRET_KEY,
+  algorithms: ['HS256']
+}).unless({
+  path: [/^\/user/]
+}))
+
 
 // 路由模块处理
+const userRouter = require('./router/user')
 app.use('/user', userRouter)
+const userinfoRouter = require('./router/userinfo')
+app.use('/my', userinfoRouter)
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.send({
+      status: 401,
+      msg: 'token is not valid'
+    })
+  } else {
+    next(err)
+  }
+})
 
 
 app.listen('8023', () => {
