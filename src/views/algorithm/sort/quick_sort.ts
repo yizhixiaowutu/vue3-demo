@@ -24,8 +24,11 @@ function partition(nums: number[], left: number, right: number): number {
   return i // 返回基准数的索引
 }
 
+let count = 0
 /* 快速排序 */
 function quickSort(nums: number[], left: number, right: number): void {
+  count++
+  console.log('nums', nums)
   // 子数组长度为 1 时终止递归
   if (left >= right) {
     return
@@ -36,6 +39,7 @@ function quickSort(nums: number[], left: number, right: number): void {
   quickSort(nums, left, pivot - 1)
   quickSort(nums, pivot + 1, right)
 }
+console.log('count', count)
 
 /* 选取三个元素的中位数 */
 function medianThree(
@@ -55,6 +59,6 @@ function medianThree(
   }
 }
 
-const numArr = [2, 4, 1, 0, 3, 5]
-const res = medianThree(numArr, 0, Math.floor(5 / 2), 5)
-console.log('res', res)
+// const numArr = [2, 4, 1, 0, 3, 5]
+// const res = medianThree(numArr, 0, Math.floor(5 / 2), 5)
+// console.log('res', res)
