@@ -126,6 +126,11 @@ const router = createRouter({
       name: 'blog',
       component: () => import('@/views/blog/main.vue'),
     },
+    {
+      path: '/threejs',
+      name: 'threejs',
+      component: () => import('@/views/threejs/index.vue'),
+    },
   ],
 })
 
