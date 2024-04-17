@@ -75,7 +75,16 @@ const router = createRouter({
       // 尝试一些好玩的
       path: '/demo',
       name: 'demo',
-      component: () => import('@/views/demo/index.vue'),
+      children: [
+        {
+          path: '/',
+          component: () => import('@/views/demo/index.vue'),
+        },
+        {
+          path: '/demo/dynamic-bg',
+          component: () => import('@/views/demo/dynamic-bg.vue'),
+        },
+      ],
     },
     {
       // css 学习
