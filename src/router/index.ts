@@ -84,6 +84,10 @@ const router = createRouter({
           path: '/demo/dynamic-bg',
           component: () => import('@/views/demo/dynamic-bg.vue'),
         },
+        {
+          path: '/demo/dynamic-bg-2',
+          component: () => import('@/views/demo/dynamic-bg-2.vue'),
+        },
       ],
     },
     {
