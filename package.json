@@ -25,6 +25,7 @@
     "express-validator": "^7.0.1",
     "fullpage.js": "^4.0.20",
     "gsap": "^3.12.5",
+    "interactjs": "^1.10.27",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "pinia": "^2.0.21",
@@ -72,4 +73,3 @@
   },
   "packageManager": "pnpm@8.15.5+sha1.a58c038faac410c947dbdb93eb30994037d0fce2"
 }
-

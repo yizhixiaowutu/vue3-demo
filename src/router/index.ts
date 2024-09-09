@@ -148,6 +148,12 @@ const router = createRouter({
       name: 'threejs',
       component: () => import('@/views/threejs/index.vue'),
     },
+    // interact.js
+    {
+      path: '/interact',
+      name: 'interact',
+      component: () => import('@/views/interact/index.vue'),
+    },
   ],
 })
 
